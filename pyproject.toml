@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verseflow"
+version = "0.1.0"
+description = "A plugin-extensible toolkit for rhyme scheme, internal rhyme, syllable, and flow analysis of rap/R&B-style lyrics."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Aadi Arya", email = "aadi.arya48@gmail.com" },
+]
+keywords = ["nlp", "lyrics", "rhyme", "rap", "poetry", "phonetics", "linguistics", "plugin"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Artistic Software",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+dependencies = [
+    "pronouncing>=0.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "mypy>=1.8",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/AadiCodes4/verseflow"
+Repository = "https://github.com/AadiCodes4/verseflow"
+Issues = "https://github.com/AadiCodes4/verseflow/issues"
+Changelog = "https://github.com/AadiCodes4/verseflow/blob/main/CHANGELOG.md"
+
+[project.scripts]
+verseflow = "verseflow.cli:main"
+
+# This is the extensibility mechanism described in the README/CONTRIBUTING:
+# built-in analyzers are registered exactly like a third-party plugin would
+# register its own, through this entry-point group.
+[project.entry-points."verseflow.analyzers"]
+syllables = "verseflow.analyzers.syllables:get_analyzer"
+end_rhyme = "verseflow.analyzers.end_rhyme:get_analyzer"
+internal_rhyme = "verseflow.analyzers.internal_rhyme:get_analyzer"
+flow_pattern = "verseflow.analyzers.flow_pattern:get_analyzer"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+files = ["src"]
